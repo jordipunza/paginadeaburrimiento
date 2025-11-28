@@ -48,9 +48,13 @@ body {
 .menu {
   width: 300px;
   background-color: pink;
+  border: white solid;
+  border-left: 2px;
+  border-top: 2px;
+  border-bottom: 2px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* icono arriba, botones debajo */
+  justify-content: center;
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
