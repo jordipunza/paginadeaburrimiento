@@ -1,10 +1,11 @@
-let musica = new Audio("musicauno/musica.mp3");
+// Música de fondo
+let musica = new Audio("musicauno/musicafondo.mp3");
 musica.loop = true;
 musica.play();
 
 function toggleCapitulos() {
   const submenu = document.getElementById("capitulos");
-  submenu.style.display = submenu.style.display === "flex" ? "none" : "flex";
+  submenu.classList.toggle("show");
 }
 
 function toggleMusica() {
