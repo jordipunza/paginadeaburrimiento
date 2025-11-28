@@ -50,7 +50,7 @@ body {
   background-color: pink;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* icono arriba, botones debajo */
+  justify-content: flex-start;
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
