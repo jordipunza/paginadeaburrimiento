@@ -23,8 +23,6 @@ body {
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  animation: fadeOut 3s ease forwards;
-  animation-delay: 3s; /* dura 3s y luego desaparece */
 }
 
 .intro-logo {
@@ -52,21 +50,28 @@ body {
   background-color: pink;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start; /* icono arriba, botones debajo */
   align-items: center;
   padding: 20px;
   box-sizing: border-box;
 }
 
+.icono {
+  margin-bottom: 20px;
+}
+
 .icono img {
-  width: 80px;
-  margin-bottom: 15px;
+  width: 100px;
+  border: 3mm solid white;
+  border-radius: 50%;
+  background-color: #ff80ab;
+  padding: 5px;
 }
 
 .botonera {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .boton {
@@ -86,17 +91,37 @@ body {
   background-color: #ff4081;
 }
 
+/* Ventanas modales para créditos y capítulos */
+.creditos,
 .submenu {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: pink;
+  border: 3mm solid white;
+  border-radius: 20px;
+  padding: 20px;
   display: none;
-  flex-direction: row;
-  margin-top: 10px;
-  opacity: 0;
-  transition: opacity 0.5s ease;
+  flex-direction: column;
+  align-items: center;
+  z-index: 10000;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-.submenu.show {
+.creditos p {
+  margin: 5px 0;
+  color: white;
+  font-weight: bold;
+}
+
+.submenu.show,
+.creditos.show {
   display: flex;
-  opacity: 1;
+}
+
+.submenu a {
+  margin: 10px;
 }
 
 .lateral {
@@ -109,13 +134,4 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-.creditos {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  background: rgba(255,255,255,0.8);
-  padding: 10px;
-  display: none;
 }
