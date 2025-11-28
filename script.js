@@ -1,9 +1,12 @@
-let musica = new Audio("musicauno/fondo.mp3");
-musica.loop = true;
+const musica = document.getElementById("musica");
 
-function iniciarMusica() {
-  musica.play();
-}
+window.addEventListener("load", () => {
+  // tras 6s (intro completo + fade), ocultamos el div intro
+  setTimeout(() => {
+    const intro = document.getElementById("intro");
+    if (intro) intro.style.display = "none";
+  }, 6000);
+});
 
 function toggleMusica() {
   if (musica.paused) {

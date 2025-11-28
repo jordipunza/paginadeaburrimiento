@@ -12,24 +12,36 @@
   <link rel="shortcut icon" href="img/ninja.jpg?v=5" type="image/x-icon">
 </head>
 <body>
+  <!-- Intro negro con logo y texto -->
+  <div id="intro" class="intro">
+    <img src="img/momo.png" alt="Momo Studios" class="intro-logo">
+    <h1 class="intro-text">Momo Studios presenta...</h1>
+  </div>
+
+  <!-- Audio de fondo -->
+  <audio id="musica" src="img/musicauno/fondo.mp3" autoplay loop></audio>
+
+  <!-- Menú lateral -->
   <div class="menu">
     <div class="icono">
       <img src="img/ninja.jpg" alt="icono del juego">
     </div>
     <div class="botonera">
-      <button class="boton" onclick="iniciarMusica(); toggleCapitulos()">Jugar</button>
+      <button class="boton" onclick="toggleCapitulos()">Jugar</button>
       <div id="capitulos" class="submenu">
         <a href="#" class="boton">Capítulo 1</a>
       </div>
-      <button class="boton" onclick="toggleMusica()">Opciones</button>
+      <button class="boton" onclick="toggleMusica()">Mutear musica</button>
       <button class="boton" onclick="mostrarCreditos()">Créditos</button>
     </div>
   </div>
 
+  <!-- Imagen lateral -->
   <div class="lateral">
-    <img src="img/ninjafondo.jpg" alt="imagen lateral">
+    <img src="img/ninjafondo.jpg" alt="Imagen lateral">
   </div>
 
+  <!-- Créditos -->
   <div id="creditos" class="creditos">
     <p>Creador: ocramito6</p>
     <p>Audios: ocramito6 - Victor Sanchez del Rio</p>
