@@ -3,10 +3,10 @@ body {
   height: 100vh;
   font-family: Arial, sans-serif;
   display: flex;
-  flex-direction: row-reverse; /* invierte el orden: primero menú (derecha), luego imagen (izquierda) */
 }
 
 .menu {
+  order: 0;
   width: 300px;
   background-color: pink;
   display: flex;
@@ -58,6 +58,7 @@ body {
 }
 
 .lateral {
+  order: 1;
   flex: 1;
   height: 100%;
   display: flex;
@@ -68,7 +69,7 @@ body {
 .lateral img {
   width: 100%;
   height: auto;
-  margin-top: 40px; /* baja la imagen un poco */
+  margin-top: 40px;
   object-fit: cover;
 }
 
