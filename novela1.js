@@ -1,29 +1,48 @@
 class Fondo {
   constructor(contenedorId) {
     this.contenedor = document.getElementById(contenedorId);
+
+    this.layer1 = document.createElement("div");
+    this.layer2 = document.createElement("div");
+    this.layer1.className = "fondo-layer visible";
+    this.layer2.className = "fondo-layer";
+
+    this.contenedor.appendChild(this.layer1);
+    this.contenedor.appendChild(this.layer2);
+
+    this.activeLayer = this.layer1;
+    this.inactiveLayer = this.layer2;
+
+    this.currentImage = null; // 🔥 guardamos la imagen actual
   }
 
-  cambiarFondo(imagen, duracion = 600) {
-    this.contenedor.style.transition = `opacity ${duracion}ms ease`;
-    this.contenedor.style.opacity = 0;
-    this.contenedor.style.backgroundImage = `url(${imagen})`;
-    requestAnimationFrame(() => {
-      this.contenedor.style.opacity = 1;
-    });
+  cambiarFondo(imagen) {
+    // ✅ Solo cambiamos si la imagen es distinta
+    if (this.currentImage === imagen) return;
+
+    this.inactiveLayer.style.backgroundImage = `url(${imagen})`;
+    this.inactiveLayer.classList.add("visible");
+    this.activeLayer.classList.remove("visible");
+
+    const temp = this.activeLayer;
+    this.activeLayer = this.inactiveLayer;
+    this.inactiveLayer = temp;
+
+    this.currentImage = imagen;
   }
 }
 
 class Musica {
   constructor() {
     this.audio = null;
-    this.muted = false; // estado persistente
+    this.muted = false;
   }
 
   cambiarMusica(ruta) {
     if (this.audio) this.audio.pause();
     this.audio = new Audio(ruta);
     this.audio.loop = true;
-    this.audio.muted = this.muted; // aplica el estado mute actual
+    this.audio.muted = this.muted;
     this.audio.play().catch(() => {});
   }
 
@@ -37,17 +56,14 @@ class Musica {
 
 class Sonido {
   constructor() {
-    this.efecto = null; // referencia al último sonido
+    this.efecto = null;
   }
 
   reproducir(ruta) {
-    // Si ya hay un sonido en reproducción, lo detenemos
     if (this.efecto) {
       this.efecto.pause();
       this.efecto.currentTime = 0;
     }
-
-    // Creamos el nuevo sonido
     this.efecto = new Audio(ruta);
     this.efecto.play().catch(() => {});
   }
@@ -74,10 +90,15 @@ class Bocadillo {
     this.contenedor.style.display = "block";
 
     const textoElem = this.contenedor.querySelector(".bocadillo-texto");
+    const imgElem = this.contenedor.querySelector(".personaje");
+
+    requestAnimationFrame(() => {
+      imgElem.classList.add("visible");
+    });
 
     let index = 0;
-    const baseSpeed = 50;   // velocidad normal
-    const fastSpeed = 20;   // velocidad rápida (no tan instantánea)
+    const baseSpeed = 50;
+    const fastSpeed = 20;
 
     const escribir = () => {
       if (index < texto.length) {
@@ -115,12 +136,11 @@ class Escena {
   }
 
   iniciar() {
-    this.indice = 0; // reinicia siempre al inicio
+    this.indice = 0;
     this.mostrarDialogoActual();
   }
 
   avanzar() {
-    // Solo avanza si no está en el último diálogo
     if (this.indice < this.dialogos.length - 1) {
       this.indice++;
       this.mostrarDialogoActual();
@@ -138,17 +158,28 @@ class Escena {
 
   mostrarDialogoActual() {
     const d = this.dialogos[this.indice];
-    if (d.fondo) this.fondo.cambiarFondo(d.fondo);
+
+    // 🔥 Buscar el último fondo válido hasta este índice
+    let fondoActual = null;
+    for (let i = this.indice; i >= 0; i--) {
+      if (this.dialogos[i].fondo) {
+        fondoActual = this.dialogos[i].fondo;
+        break;
+      }
+    }
+    if (fondoActual) {
+      this.fondo.cambiarFondo(fondoActual);
+    }
+
     if (d.musica) this.musica.cambiarMusica(d.musica);
     if (d.sonido) this.sonido.reproducir(d.sonido);
 
     this.currentBocadillo = new Bocadillo("dialogo", d.posicion, () => this.skipMode);
     this.currentBocadillo.mostrarDialogo(d.texto, d.imagen, d.nombre, d.fuente, () => {
-      // si skip está activo, espera un poco antes de avanzar automáticamente
       if (this.skipMode) {
         setTimeout(() => {
           this.avanzar();
-        }, 1200); // 1.2 segundos de margen para leer
+        }, 1200);
       }
     });
   }
@@ -156,7 +187,6 @@ class Escena {
   actualizarPrevBtn() {
     const prevBtn = document.getElementById("prevBtn");
     if (!prevBtn) return;
-    // deshabilitado si skip activo o si está en el primer diálogo
     prevBtn.disabled = this.skipMode || this.indice === 0;
   }
 }
@@ -167,14 +197,11 @@ window.addEventListener("load", () => {
   const sonido = new Sonido();
   const escena = new Escena(fondo, musica, sonido);
 
-  // Botón Skip fijo
   const skipBtn = document.getElementById("skipBtn");
   skipBtn.addEventListener("click", () => {
     escena.skipMode = !escena.skipMode;
     skipBtn.classList.toggle("active", escena.skipMode);
     skipBtn.textContent = escena.skipMode ? "Skip ON" : "Skip OFF";
-
-    // Si activas Skip y el texto actual ya terminó, avanza inmediatamente
     const b = escena.currentBocadillo;
     if (escena.skipMode && b && b.finished) {
       escena.avanzar();
@@ -182,7 +209,6 @@ window.addEventListener("load", () => {
     escena.actualizarPrevBtn();
   });
 
-  // Botón Anterior fijo
   const prevBtn = document.getElementById("prevBtn");
   prevBtn.addEventListener("click", () => {
     if (!escena.skipMode) {
@@ -190,13 +216,11 @@ window.addEventListener("load", () => {
     }
   });
 
-  // Botón Menú arriba izquierda
   const menuBtn = document.getElementById("menuBtn");
   menuBtn.addEventListener("click", () => {
     window.location.href = "index.html";
   });
 
-  // Botón Mute arriba izquierda
   const muteBtn = document.getElementById("muteBtn");
   muteBtn.addEventListener("click", () => {
     if (escena.musica.muted) {
@@ -208,7 +232,6 @@ window.addEventListener("load", () => {
     }
   });
 
-  // Pantalla de inicio independiente
   const startScreen = document.getElementById("startScreen");
   startScreen.addEventListener("click", () => {
     startScreen.style.display = "none";
@@ -216,49 +239,46 @@ window.addEventListener("load", () => {
     escena.actualizarPrevBtn();
   }, { once: true });
 
-  // Avance manual independiente del skip
   document.addEventListener("click", (ev) => {
     if (ev.target && (ev.target.id === "skipBtn" || ev.target.id === "prevBtn" || ev.target.id === "menuBtn" || ev.target.id === "muteBtn")) return;
     if (ev.target && ev.target.id === "startScreen") return;
-
     const b = escena.currentBocadillo;
     if (b && b.finished && !escena.skipMode) {
       escena.avanzar();
     }
   });
 
-  // Ejemplos de diálogos
+  // 📌 Primer diálogo con comentarios de cada parámetro
   escena.agregarDialogo(
-    "Hola, soy el protagonista.",   // texto
-    "img/ninjach.png",              // sprite del personaje
-    "izquierda",                    // posición del bocadillo
-    "img/ninjafondo.jpg",           // fondo (cambia aquí)
-    "img/musicauno/fondo.mp3",      // música (cambia aquí)
-    null,                           // sonido puntual (ninguno en este caso)
-    "Ninjamejor",                   // nombre del personaje
-    "Georgia"                       // fuente del texto
+    "Hola, soy el protagonista.",   // texto que se muestra en el bocadillo
+    "img/ninjach.png",              // sprite del personaje (imagen del protagonista)
+    "izquierda",                    // posición del bocadillo (izquierda/derecha)
+    "img/ninjafondo.jpg",           // fondo de la escena
+    "img/musicauno/fondo.mp3",      // música de fondo
+    null,                           // sonido puntual (efecto de sonido)
+    "Ninjamejor",                   // nombre del personaje que habla
+    "Georgia"                       // fuente tipográfica del texto
   );
 
   escena.agregarDialogo(
-    "Ninja feo",                    // texto
-    "img/momo.png",                 // sprite del personaje
-    "derecha",                      // posición del bocadillo
-    null,                           // fondo (no cambia)
-    null,                           // música (no cambia)
-    null,                           // sonido puntual (ninguno)
-    "Momo",                         // nombre del personaje
-    "Courier New"                   // fuente del texto
+    "Ninja feo",
+    "img/momo.png",
+    "derecha",
+    null,
+    null,
+    null,
+    "Momo",
+    "Courier New"
   );
 
-escena.agregarDialogo(
-  ":(", // texto
-  "img/ninjach.png",              // sprite del personaje
-  "izquierda",                    // posición del bocadillo
-  "img/momo.png",                           // fondo (no cambia)
-  "img/musicauno/accion.mp3",                           // música (no cambia)
-  "img/sonidos/meretiro.mp3",                           // sonido puntual (ninguno)
-  "Ninjamejor",                   // nombre largo
-  "Comic Sans MS"                 // fuente del texto
-);
-
+  escena.agregarDialogo(
+    ":(",
+    "img/ninjach.png",
+    "izquierda",
+    "img/momo.png",
+    "img/musicauno/accion.mp3",
+    "img/sonidos/meretiro.mp3",
+    "Ninjamejor",
+    "Comic Sans MS"
+  );
 });

@@ -1,11 +1,22 @@
 #fondo {
   position: fixed;
   inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* Capas para transición de fondo */
+.fondo-layer {
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.fondo-layer.visible {
   opacity: 1;
-  transition: opacity 0.6s ease;
-  z-index: -1;
 }
 
 #dialogo {
@@ -39,6 +50,12 @@
   width: 200px;
   height: auto;
   margin-bottom: -20px;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.personaje.visible {
+  opacity: 1;
 }
 
 .bocadillo {
@@ -60,10 +77,10 @@
 .nombre {
   position: absolute;
   top: -30px;
-  max-width: 200px;       /* límite horizontal */
-  white-space: nowrap;    /* no salta de línea */
-  overflow: hidden;       /* oculta exceso */
-  text-overflow: ellipsis;/* puntos suspensivos si es muy largo */
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   background: #ff80ab;
   color: white;
   font-weight: bold;
@@ -195,7 +212,7 @@
   }
 
   #prevBtn {
-    right: 100px; /* ajusta posición en pantallas más pequeñas */
+    right: 100px;
   }
 }
 
@@ -229,7 +246,7 @@
   }
 
   #prevBtn {
-    right: 90px; /* ajusta posición en móviles */
+    right: 90px;
   }
 }
 
@@ -257,16 +274,15 @@
   background: #222;
 }
 
-/* 🔒 Evitar arrastre y contorno azul */
 body {
-  user-select: none; /* no permite seleccionar texto */
+  user-select: none;
 }
 
 img, button {
-  -webkit-user-drag: none; /* evita arrastrar imágenes/botones en WebKit */
+  -webkit-user-drag: none;
   user-select: none;
 }
 
 button:focus {
-  outline: none; /* elimina el contorno azul */
+  outline: none;
 }
