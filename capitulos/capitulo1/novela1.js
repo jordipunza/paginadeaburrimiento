@@ -13,11 +13,10 @@ class Fondo {
     this.activeLayer = this.layer1;
     this.inactiveLayer = this.layer2;
 
-    this.currentImage = null; // 🔥 guardamos la imagen actual
+    this.currentImage = null;
   }
 
   cambiarFondo(imagen) {
-    // ✅ Solo cambiamos si la imagen es distinta
     if (this.currentImage === imagen) return;
 
     this.inactiveLayer.style.backgroundImage = `url(${imagen})`;
@@ -148,7 +147,11 @@ class Escena {
   }
 
   agregarDialogo(texto, imagen, posicion = "izquierda", fondo = null, musica = null, sonido = null, nombre = "", fuente = "inherit") {
-    this.dialogos.push({ texto, imagen, posicion, fondo, musica, sonido, nombre, fuente });
+    this.dialogos.push({ tipo: "dialogo", texto, imagen, posicion, fondo, musica, sonido, nombre, fuente });
+  }
+
+  agregarRedireccion(redirect) {
+    this.dialogos.push({ tipo: "redirect", redirect });
   }
 
   iniciar() {
@@ -175,7 +178,11 @@ class Escena {
   mostrarDialogoActual() {
     const d = this.dialogos[this.indice];
 
-    // 🔥 Buscar el último fondo válido hasta este índice
+    if (d.tipo === "redirect") {
+      window.location.href = d.redirect;
+      return;
+    }
+
     let fondoActual = null;
     for (let i = this.indice; i >= 0; i--) {
       if (this.dialogos[i].fondo) {
@@ -183,9 +190,7 @@ class Escena {
         break;
       }
     }
-    if (fondoActual) {
-      this.fondo.cambiarFondo(fondoActual);
-    }
+    if (fondoActual) this.fondo.cambiarFondo(fondoActual);
 
     if (d.musica) this.musica.cambiarMusica(d.musica);
     if (d.sonido) this.sonido.reproducir(d.sonido);
@@ -256,7 +261,7 @@ window.addEventListener("load", () => {
   }, { once: true });
 
   document.addEventListener("click", (ev) => {
-    if (ev.target && (ev.target.id === "skipBtn" || ev.target.id === "prevBtn" || ev.target.id === "menuBtn" || ev.target.id === "muteBtn")) return;
+    if (["skipBtn","prevBtn","menuBtn","muteBtn"].includes(ev.target.id)) return;
     if (ev.target && ev.target.id === "startScreen") return;
     const b = escena.currentBocadillo;
     if (b && b.finished && !escena.skipMode) {
@@ -264,26 +269,27 @@ window.addEventListener("load", () => {
     }
   });
 
-
+  // Ejemplo de diálogos y redirección
   escena.agregarDialogo(
-    "",   // texto que se muestra en el bocadillo
-    "",              // sprite del personaje (imagen del protagonista)
-    "izquierda",                    // posición del bocadillo (izquierda/derecha)
-    "img/vacio.jpg",           // fondo de la escena
-    "img/musicauno/vacio.mp3",      // música de fondo
-    null,                           // sonido puntual (efecto de sonido)
-    "???",                   // nombre del personaje que habla
-    "Fira Code"                       // fuente tipográfica del texto
+    "Inicio vacío...",
+    "",
+    "izquierda",
+    "../../img/vacio.jpg",
+    "../../img/musicauno/vacio.mp3",
+    null,
+    "???",
+    "Fira Code"
   );
 
   escena.agregarDialogo(
     "Proximamente...",
-    "img/momo.png",
+    "../../img/momo.png",
     "izquierda",
     null,
-    null,
+    "muted",
     null,
     "Momo",
     "Courier New"
   );
+  escena.agregarRedireccion("../../index.html");
 });
