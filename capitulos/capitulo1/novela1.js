@@ -355,7 +355,7 @@ window.addEventListener("load", () => {
   escena.agregarDialogo(
     true,
     ". . .",
-    "../../img/momo.png",
+    "../../img/ch/momo/momo.png",
     "izquierda",
     null,
     null,
@@ -383,7 +383,7 @@ window.addEventListener("load", () => {
   escena.agregarDialogo(
     true,
     "Porque sigues aqui...",
-    "../../img/momo.png",
+    "../../img/ch/momo/momo.png",
     "izquierda",
     null,
     null,
@@ -396,7 +396,7 @@ window.addEventListener("load", () => {
   escena.agregarDialogo(
     true,
     "No hay nada interesante y da igual cuanto intentes skipear no te voy a dejar skipear rapido ya que no hay nada",
-    "../../img/momo.png",
+    "../../img/ch/momo/momo.png",
     "izquierda",
     null,
     null,
@@ -409,7 +409,7 @@ window.addEventListener("load", () => {
   escena.agregarDialogo(
     true,
     "...      ",
-    "../../img/momo.png",
+    "../../img/ch/momo/momo.png",
     "izquierda",
     null,
     null,
@@ -422,7 +422,7 @@ window.addEventListener("load", () => {
   escena.agregarDialogo(
     true,
     "...      ",
-    "../../img/momo.png",
+    "../../img/ch/momo/momo.png",
     "izquierda",
     null,
     null,
@@ -435,7 +435,7 @@ window.addEventListener("load", () => {
   escena.agregarDialogo(
     true,
     "...      ",
-    "../../img/momo.png",
+    "../../img/ch/momo/momo.png",
     "izquierda",
     null,
     null,
@@ -448,7 +448,7 @@ window.addEventListener("load", () => {
   escena.agregarDialogo(
     true,
     ". . .      ",
-    "../../img/momo.png",
+    "../../img/ch/momo/momo.png",
     "izquierda",
     null,
     "muted",
@@ -461,7 +461,7 @@ window.addEventListener("load", () => {
   escena.agregarDialogo(
     true,
     "Vale dude",
-    "../../img/bear5.png",
+    "../../img/ch/bear5/bear5.png",
     "derecha",
     "../../img/ninjafondo.jpg",
     "muted",
